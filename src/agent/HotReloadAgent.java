@@ -1,5 +1,8 @@
 package agent;
 
+import hotreload.LoadUtils;
+
+import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -11,8 +14,12 @@ public class HotReloadAgent
     {
         try
         {
-            inst.addTransformer(new MyTransformer());
-            inst.retransformClasses(HotReloadUtils.class);
+//            inst.addTransformer(new MyTransformer(),true);
+//            inst.retransformClasses(HotReloadUtils.class);
+            ClassDefinition cd = new ClassDefinition(HotReloadUtils.class,
+                    LoadUtils.getBytesFromFils("HotReloadUtils.class"));
+            inst.redefineClasses(cd);
+            System.out.println("reload done.");
 
         } catch (Exception e)
         {
